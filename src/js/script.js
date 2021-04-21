@@ -14,6 +14,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let slideIndex = 1;
     let offset = 0;
 
+    function converType (string) {
+        return +width.replace(/\D/g, '');
+    }
+
+    function getCurrentSlide () {
+        if (slideIndex < 10) {
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = slideIndex;
+        }
+    }
+
+    function setDotStyle () {
+        dots.forEach(item => item.style.opacity = '0.5');
+        dots[slideIndex - 1].style.opacity = 1;
+    }
+
     slidesField.style.display = 'flex';
     slidesField.style.width = 100 * slides.length + '%';
     slidesField.style.transition = '0.4s ease-in-out';
@@ -46,10 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     next.addEventListener('click', () => {
-        if (offset == (+width.replace(/\D/g, '')) * (slides.length - 1)) {
+        if (offset == converType(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += (+width.replace(/\D/g, ''));
+            offset += converType(width);
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`;
@@ -60,21 +77,16 @@ document.addEventListener('DOMContentLoaded', () => {
             slideIndex++;
         }
 
-        if (slideIndex < 10) {
-            current.textContent = `0${slideIndex}`;
-        } else {
-            current.textContent = slideIndex;
-        }
+        getCurrentSlide();
 
-        dots.forEach(item => item.style.opacity = '0.5');
-        dots[slideIndex - 1].style.opacity = 1;
+        setDotStyle();
     });
 
     prev.addEventListener('click', () => {
         if (offset == 0) {
-            offset = (+width.replace(/\D/g, '')) * (slides.length - 1);
+            offset = converType(width) * (slides.length - 1);
         } else {
-            offset -= (+width.replace(/\D/g, ''));
+            offset -= converType(width);
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`;
@@ -85,14 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
             slideIndex--;
         }
 
-        if (slideIndex < 10) {
-            current.textContent = `0${slideIndex}`;
-        } else {
-            current.textContent = slideIndex;
-        }
+        getCurrentSlide();
 
-        dots.forEach(item => item.style.opacity = '0.5');
-        dots[slideIndex - 1].style.opacity = 1;
+        setDotStyle();
     });
 
     dots.forEach(item => {
@@ -101,18 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             slideIndex = slideTo;
 
-            offset = (+width.replace(/\D/g, '')) * (slideTo - 1);
+            offset = converType(width) * (slideTo - 1);
 
             slidesField.style.transform = `translateX(-${offset}px)`;
 
-            if (slideIndex < 10) {
-                current.textContent = `0${slideIndex}`;
-            } else {
-                current.textContent = slideIndex;
-            }
+            getCurrentSlide();
 
-            dots.forEach(item => item.style.opacity = '0.5');
-            dots[slideIndex - 1].style.opacity = 1;
+            setDotStyle();
         });
     });
 
